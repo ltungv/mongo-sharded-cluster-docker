@@ -3,17 +3,30 @@ default:
 
 .PHONY: up
 up: down
-	docker-compose up
+	docker-compose up -d
+	docker-compose logs -f
 
 .PHONY: down
 down:
 	docker-compose down
 
 .PHONY: bootstrap
-bootstrap:
+bootstrap: bootstrap_shard1 bootstrap_shard2 bootstrap_cfgsvr bootstrap_mongos
+
+.PHONY: bootstrap_shard1
+bootstrap_shard1:
 	docker exec shard1a mongo /home/mongo-scripts/primary/shard1.js
+
+.PHONY: bootstrap_shard2
+bootstrap_shard2:
 	docker exec shard2a mongo /home/mongo-scripts/primary/shard2.js
+
+.PHONY: bootstrap_cfgsvr
+bootstrap_cfgsvr:
 	docker exec cfgsvr1 mongo /home/mongo-scripts/primary/cfgsvr.js
+
+.PHONY: bootstrap_mongos
+bootstrap_mongos:
 	docker exec mongos1 mongo /home/mongo-scripts/primary/mongos.js
 
 .PHONY: shard1
