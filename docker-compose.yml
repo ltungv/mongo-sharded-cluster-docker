@@ -1,0 +1,139 @@
+version: '3.8'
+services:
+  shard1a:
+    image: mongo:latest
+    container_name: shard1a
+    environment:
+      - PRIMARY=1
+    depends_on:
+      - shard1b
+      - shard1c
+    entrypoint: "/home/scripts/setup/shard1.sh && /home/scripts/primary/shard1.sh"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  shard1b:
+    image: mongo:latest
+    container_name: shard1b
+    entrypoint: "/home/scripts/setup/shard1.sh"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  shard1c:
+    image: mongo:latest
+    container_name: shard1c
+    entrypoint: "/home/scripts/setup/shard1.sh"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+
+  shard2a:
+    image: mongo:latest
+    container_name: shard2a
+    environment:
+      - PRIMARY=1
+    depends_on:
+      - shard2b
+      - shard2c
+    entrypoint: "/home/scripts/setup/shard2.sh && /home/scripts/primary/shard2.sh"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  shard2b:
+    image: mongo:latest
+    container_name: shard2b
+    entrypoint: "/home/scripts/setup/shard2.sh"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  shard2c:
+    image: mongo:latest
+    container_name: shard2c
+    entrypoint: "/home/scripts/setup/shard2.sh"
+    restart: always
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+
+  cfgsvr1:
+    image: mongo:latest
+    container_name: cfgsvr1
+    environment:
+      - PRIMARY=1
+    depends_on:
+      - cfgsvr2
+      - cfgsvr3
+    entrypoint: "/home/scripts/setup/cfgsvr.sh && /home/scripts/primary/cfgsvr.sh"
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  cfgsvr2:
+    image: mongo:latest
+    container_name: cfgsvr2
+    entrypoint: "/home/scripts/setup/cfgsvr.sh"
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  cfgsvr3:
+    image: mongo:latest
+    container_name: cfgsvr3
+    entrypoint: "/home/scripts/setup/cfgsvr.sh"
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+
+  mongos1:
+    container_name: mongos1
+    image: mongo:latest
+    environment:
+      - PRIMARY=1
+    depends_on:
+      - cfgsvr1
+      - cfgsvr2
+      - cfgsvr3
+    entrypoint: "/home/scripts/setup/mongos.sh && /home/scripts/primary/mongos.sh"
+    ports:
+      - 3000:27017
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
+  mongos2:
+    container_name: mongos2
+    image: mongo:latest
+    depends_on:
+      - cfgsvr1
+      - cfgsvr2
+      - cfgsvr3
+    entrypoint: "/home/scripts/setup/mongos.sh"
+    ports:
+      - 3001:27017
+    expose:
+      - 27017
+    volumes:
+      - "./mongo-scripts:/home/mongo-scripts"
+      - "./scripts:/home/scripts"
