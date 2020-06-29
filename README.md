@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-+ Docker
-+ docker-compose
++ Docker (get it [here](https://www.docker.com/get-started))
++ docker-compose (get it [here](https://docs.docker.com/compose/install/))
 
 ## Run the demo
 
