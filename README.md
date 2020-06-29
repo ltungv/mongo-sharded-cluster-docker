@@ -5,6 +5,14 @@
 + Docker (get it [here](https://www.docker.com/get-started))
 + docker-compose (get it [here](https://docs.docker.com/compose/install/))
 
+## Terminologies
+
+### Replicaset
+![Replica set](https://docs.mongodb.com/manual/_images/replica-set-read-write-operations-primary.bakedsvg.svg)
+
+### Sharding
+![Sharded cluster](https://docs.mongodb.com/manual/_images/sharded-cluster-production-architecture.bakedsvg.svg)
+
 ## Run the demo
 
 Start the cluster
